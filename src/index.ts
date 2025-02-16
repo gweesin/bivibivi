@@ -15,13 +15,17 @@ program
   .version('1.0.0')
   .argument('<input>', 'Input mp4 directory path')
   .argument('[output]', 'Output file path (default: output.mp4)')
-  .action(async (input: string) => {
+  .action(async (input: string, output: string | undefined) => {
     if (!fs.existsSync(input)) {
       log.error(new Error(`Input path "${input}" does not exist.`))
       process.exit(1)
     }
 
     const inputStat = fs.statSync(input)
+
+    if (!output) {
+      output = path.basename(input)
+    }
 
     try {
       if (inputStat.isDirectory()) {
@@ -43,7 +47,7 @@ program
             const fileListContent = currentFileList.map(f => `file '${f}'`).join('\n')
             fs.writeFileSync(fileListPath, fileListContent)
 
-            const outputFilePath = path.join(input, `output_part${partIndex}.mp4`)
+            const outputFilePath = path.join(input, `${output}_part${partIndex}.mp4`)
             execSync(`ffmpeg -f concat -safe 0 -i ${fileListPath} -c copy ${outputFilePath}`, { stdio: 'inherit' })
 
             log.info({ prefix: 'bivibivi', message: `Merged video part ${partIndex} saved to ${outputFilePath}` })
@@ -63,7 +67,7 @@ program
           const fileListContent = currentFileList.map(f => `file '${f}'`).join('\n')
           fs.writeFileSync(fileListPath, fileListContent)
 
-          const outputFilePath = path.join(input, `output_part${partIndex}.mp4`)
+          const outputFilePath = path.join(input, `${output}_part${partIndex}.mp4`)
           execSync(`ffmpeg -f concat -safe 0 -i ${fileListPath} -c copy ${outputFilePath}`, { stdio: 'inherit' })
 
           log.info({ prefix: 'bivibivi', message: `Merged video part ${partIndex} saved to ${outputFilePath}` })
