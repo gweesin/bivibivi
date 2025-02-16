@@ -1,4 +1,4 @@
-# music-converter
+# bivibivi
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
@@ -10,36 +10,36 @@ batch convert wav files to mp3 files.
 
 <!-- Badges -->
 
-[npm-version-src]: https://img.shields.io/npm/v/music-converter?style=flat&colorA=080f12&colorB=1fa669
-[npm-version-href]: https://npmjs.com/package/music-converter
-[npm-downloads-src]: https://img.shields.io/npm/dm/music-converter?style=flat&colorA=080f12&colorB=1fa669
-[npm-downloads-href]: https://npmjs.com/package/music-converter
-[bundle-src]: https://img.shields.io/bundlephobia/minzip/music-converter?style=flat&colorA=080f12&colorB=1fa669&label=minzip
-[bundle-href]: https://bundlephobia.com/result?p=music-converter
-[license-src]: https://img.shields.io/github/license/gweesin/music-converter.svg?style=flat&colorA=080f12&colorB=1fa669
-[license-href]: https://github.com/gweesin/music-converter/blob/main/LICENSE
+[npm-version-src]: https://img.shields.io/npm/v/bivibivi?style=flat&colorA=080f12&colorB=1fa669
+[npm-version-href]: https://npmjs.com/package/bivibivi
+[npm-downloads-src]: https://img.shields.io/npm/dm/bivibivi?style=flat&colorA=080f12&colorB=1fa669
+[npm-downloads-href]: https://npmjs.com/package/bivibivi
+[bundle-src]: https://img.shields.io/bundlephobia/minzip/bivibivi?style=flat&colorA=080f12&colorB=1fa669&label=minzip
+[bundle-href]: https://bundlephobia.com/result?p=bivibivi
+[license-src]: https://img.shields.io/github/license/gweesin/bivibivi.svg?style=flat&colorA=080f12&colorB=1fa669
+[license-href]: https://github.com/gweesin/bivibivi/blob/main/LICENSE
 [jsdocs-src]: https://img.shields.io/badge/jsdocs-reference-080f12?style=flat&colorA=080f12&colorB=1fa669
-[jsdocs-href]: https://www.jsdocs.io/package/music-converter
+[jsdocs-href]: https://www.jsdocs.io/package/bivibivi
 
-# Usage Guide for `music-converter`
+# Usage Guide for `bivibivi`
 
 ## Overview
 
-`music-converter` is a command-line tool to batch convert WAV files to MP3 format. It supports converting individual files or entire directories with configurable concurrency.
+`bivibivi` is a command-line tool to batch convert WAV files to MP3 format. It supports converting individual files or entire directories with configurable concurrency.
 
 ## Installation
 
-To install `music-converter`, use npm:
+To install `bivibivi`, use npm:
 
 ```sh
-npm install -g music-converter
+npm install -g bivibivi
 ```
 
 ## Usage
 
 ### Command Line Interface
 
-The `music-converter` tool provides a command-line interface (CLI) with the following options:
+The `bivibivi` tool provides a command-line interface (CLI) with the following options:
 
 ```sh
 wav-to-mp3 <input> [output] [options]
