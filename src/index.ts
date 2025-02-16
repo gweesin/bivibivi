@@ -1,25 +1,21 @@
 #!/usr/bin/env esno
 
+import { execSync } from 'node:child_process'
 import fs from 'node:fs'
-import os from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
 import { Command } from 'commander'
 import { log } from './logger'
-import { convertWavToMp3, processDirectory } from './processor'
 
 const program = new Command()
 
 program
-  .name('wav-to-mp3')
-  .description('Convert WAV files or directories to MP3 format')
+  .name('bivibivi')
+  .description('Merge and cut video for submitting bilibili')
   .version('1.0.0')
-  .argument('<input>', 'Input WAV file or directory path')
-  .argument('[output]', 'Output directory path (default: same directory as input)')
-  .option('-c, --concurrency <number>', 'Number of concurrent file conversions', value => Number.parseInt(value, 10), os.cpus().length)
-  .action(async (input: string, output: string | undefined, options: { concurrency: number }) => {
-    const { concurrency } = options
-
+  .argument('<input>', 'Input mp4 directory path')
+  .argument('[output]', 'Output file path (default: output.mp4)')
+  .action(async (input: string) => {
     if (!fs.existsSync(input)) {
       log.error(new Error(`Input path "${input}" does not exist.`))
       process.exit(1)
@@ -29,11 +25,51 @@ program
 
     try {
       if (inputStat.isDirectory()) {
-        await processDirectory(input, output, concurrency)
-      }
-      else {
-        const resolvedOutput = output ?? path.join(path.dirname(input), `${path.basename(input, path.extname(input))}.mp3`)
-        await convertWavToMp3(input, resolvedOutput)
+        const files = fs.readdirSync(input)
+          .filter(file => path.extname(file).toLowerCase() === '.mp4')
+          .map(file => path.join(input, file))
+
+        let currentFileList: string[] = []
+        let currentSize = 0
+        let partIndex = 1
+
+        for (const file of files) {
+          const stats = fs.statSync(file)
+          const fileSizeInBytes = stats.size
+          const fileSizeInGB = fileSizeInBytes / (1024 * 1024 * 1024)
+
+          if (currentSize + fileSizeInGB > 16) {
+            const fileListPath = path.join(input, `filelist_part${partIndex}.txt`)
+            const fileListContent = currentFileList.map(f => `file '${f}'`).join('\n')
+            fs.writeFileSync(fileListPath, fileListContent)
+
+            const outputFilePath = path.join(input, `output_part${partIndex}.mp4`)
+            execSync(`ffmpeg -f concat -safe 0 -i ${fileListPath} -c copy ${outputFilePath}`, { stdio: 'inherit' })
+
+            log.info({ prefix: 'bivibivi', message: `Merged video part ${partIndex} saved to ${outputFilePath}` })
+
+            fs.unlinkSync(fileListPath)
+            currentFileList = []
+            currentSize = 0
+            partIndex++
+          }
+
+          currentFileList.push(file)
+          currentSize += fileSizeInGB
+        }
+
+        if (currentFileList.length > 0) {
+          const fileListPath = path.join(input, `filelist_part${partIndex}.txt`)
+          const fileListContent = currentFileList.map(f => `file '${f}'`).join('\n')
+          fs.writeFileSync(fileListPath, fileListContent)
+
+          const outputFilePath = path.join(input, `output_part${partIndex}.mp4`)
+          execSync(`ffmpeg -f concat -safe 0 -i ${fileListPath} -c copy ${outputFilePath}`, { stdio: 'inherit' })
+
+          log.info({ prefix: 'bivibivi', message: `Merged video part ${partIndex} saved to ${outputFilePath}` })
+
+          fs.unlinkSync(fileListPath)
+        }
       }
     }
     catch (error: any) {
