@@ -15,4 +15,4 @@ function setupTerminalLogger(): void {
 setupTerminalLogger()
 
 // Export the logger instance
-export const log = logger('wav-to-mp3')
+export const log = logger('bivibivi')

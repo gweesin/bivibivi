@@ -25,7 +25,7 @@ batch convert wav files to mp3 files.
 
 ## Overview
 
-`bivibivi` is a command-line tool to batch convert WAV files to MP3 format. It supports converting individual files or entire directories with configurable concurrency.
+Merge and cut video for submitting bilibili.
 
 ## Installation
 
@@ -42,7 +42,7 @@ npm install -g bivibivi
 The `bivibivi` tool provides a command-line interface (CLI) with the following options:
 
 ```sh
-wav-to-mp3 <input> [output] [options]
+bivibivi <input> [output] [options]
 ```
 
 - `<input>`: Path to the input WAV file or directory.
@@ -50,37 +50,11 @@ wav-to-mp3 <input> [output] [options]
 
 ### Options
 
-- `-c, --concurrency <number>`: Number of concurrent file conversions (default: number of CPU cores).
+- [ ] TODO
 
 ### Examples
 
-#### Convert a Single File
-
-To convert a single WAV file to MP3:
-
-```sh
-wav-to-mp3 /path/to/input.wav /path/to/output.mp3
-```
-
-#### Convert a Directory
-
-To convert all WAV files in a directory to MP3:
-
-```sh
-wav-to-mp3 /path/to/input-directory /path/to/output-directory
-```
-
-#### Specify Concurrency
-
-To convert files with a specified number of concurrent conversions:
-
-```sh
-wav-to-mp3 /path/to/input-directory /path/to/output-directory --concurrency 4
-```
-
-## Logging
-
-The tool uses a custom logger to provide detailed information about the conversion process. Logs include messages about the start and completion of conversions, progress updates, and any errors encountered.
+- [ ] TODO
 
 ## License
 
