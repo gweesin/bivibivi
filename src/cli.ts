@@ -5,7 +5,6 @@ import process from 'node:process'
 import { Command } from 'commander'
 import { execa } from 'execa'
 import fse from 'fs-extra'
-import { log } from './logger'
 
 const program = new Command()
 
@@ -17,7 +16,7 @@ program
   .argument('[output]', 'Output file path (default: output.mp4)')
   .action(async (input: string, output: string | undefined) => {
     if (!await fse.pathExists(input)) {
-      log.error(new Error(`Input path "${input}" does not exist.`))
+      console.error(new Error(`Input path "${input}" does not exist.`))
       process.exit(1)
     }
 
@@ -50,7 +49,7 @@ program
             const outputFilePath = path.join(input, `${output}_part${partIndex}.mp4`)
             await execa('ffmpeg', ['-f', 'concat', '-safe', '0', '-i', fileListPath, '-c', 'copy', outputFilePath], { stdio: 'inherit' })
 
-            log.info({ prefix: 'bivibivi', message: `Merged video part ${partIndex} saved to ${outputFilePath}` })
+            console.log(`Merged video part ${partIndex} saved to ${outputFilePath}`)
 
             await fse.remove(fileListPath)
             currentFileList = []
@@ -70,14 +69,14 @@ program
           const outputFilePath = path.join(input, `${output}_part${partIndex}.mp4`)
           await execa('ffmpeg', ['-f', 'concat', '-safe', '0', '-i', fileListPath, '-c', 'copy', outputFilePath], { stdio: 'inherit' })
 
-          log.info({ prefix: 'bivibivi', message: `Merged video part ${partIndex} saved to ${outputFilePath}` })
+          console.log(`Merged video part ${partIndex} saved to ${outputFilePath}`)
 
           await fse.remove(fileListPath)
         }
       }
     }
     catch (error: any) {
-      log.error(error, `General error while processing input: ${error.message}`)
+      console.error(error, `General error while processing input: ${error.message}`)
     }
   })
 
