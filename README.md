@@ -32,7 +32,7 @@ Merge and cut video for submitting bilibili.
 To install `bivibivi`, use npm:
 
 ```sh
-npm install -g bivibivi
+pnpm i -g bivibivi
 ```
 
 ## Usage
@@ -43,6 +43,12 @@ The `bivibivi` tool provides a command-line interface (CLI) with the following o
 
 ```sh
 bivibivi <input> [output] [options]
+```
+
+or
+
+```sh
+pnpx bivibivi <input> [output] [options]
 ```
 
 - `<input>`: Path to the input WAV file or directory.
