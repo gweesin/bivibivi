@@ -6,7 +6,7 @@ import { Command } from 'commander'
 import { execa } from 'execa'
 import fse from 'fs-extra'
 
-const program = new Command()
+export const program = new Command()
 
 program
   .name('bivibivi')
@@ -14,13 +14,15 @@ program
   .version('1.0.0')
   .argument('<input>', 'Input mp4 directory path')
   .argument('[output]', 'Output file path (default: output.mp4)')
-  .action(async (input: string, output: string | undefined) => {
+  .option('-s, --size <size>', 'Maximum size in GB for each part (default: 16)', '16')
+  .action(async (input: string, output: string | undefined, options: { size: string }) => {
     if (!await fse.pathExists(input)) {
       console.error(new Error(`Input path "${input}" does not exist.`))
       process.exit(1)
     }
 
     const inputStat = await fse.stat(input)
+    const sizeThreshold = Number.parseFloat(options.size)
 
     if (!output) {
       output = path.basename(input)
@@ -41,7 +43,7 @@ program
           const fileSizeInBytes = stats.size
           const fileSizeInGB = fileSizeInBytes / (1024 * 1024 * 1024)
 
-          if (currentSize + fileSizeInGB > 16) {
+          if (currentSize + fileSizeInGB > sizeThreshold) {
             const fileListPath = path.join(input, `filelist_part${partIndex}.txt`)
             const fileListContent = currentFileList.map(f => `file '${f}'`).join('\n')
             await fse.writeFile(fileListPath, fileListContent)
